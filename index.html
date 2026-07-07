@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <script defer type="module" src="js/main.js"></script>
+  <title>Web Componnets Sandbox</title>
+ 
+</head>
+<body>
+  <main id="app">
+    <nav>
+      <app-link to="/">Explore Profiles</app-link>
+      <app-link to="/create">Add Profile</app-link>
+    </nav>
+    <app-router>
+      <profile-directory route="/"></profile-directory>
+      <profile-form id="app-profile-form" route="/create"></profile-form>
+      <profile-form id="app-profile-form-edit" route="/edit"></profile-form>
+    </app-router>
+  </main>
+</body>
+</html>

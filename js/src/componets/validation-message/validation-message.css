@@ -1,0 +1,17 @@
+:host {
+  display: none;
+  color: #dc3545;
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-top: 0.25rem;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+:host([visible]) {
+  display: block;
+
+  .error-icon {
+    margin-right: 4px;
+    display: inline-block;
+  }
+}

@@ -1,0 +1,12 @@
+:host {
+  display: block;
+  padding: 1rem;
+  background: #fff;
+  border-radius: 8px;
+}
+
+.status {
+  color: #666;
+  font-style: italic;
+  margin-top: 1rem;
+}

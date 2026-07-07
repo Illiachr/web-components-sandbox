@@ -1,0 +1,21 @@
+ body {
+   font-family: system-ui, sans-serif;
+   padding: 2rem;
+   background-color: #f8f9fa;
+   color: #212529;
+ }
+
+ nav {
+   max-width: 600px;
+   margin: 0 auto 1rem;
+   display: flex;
+   gap: 1rem;
+ }
+
+ app-router>* {
+   display: none;
+ }
+
+ app-router>.active {
+   display: block;
+ }

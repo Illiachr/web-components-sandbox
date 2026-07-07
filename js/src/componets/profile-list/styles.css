@@ -1,0 +1,53 @@
+:host {
+  display: block;
+}
+
+.list-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.profile-card {
+  background: #f8f9fa;
+  padding: 1rem;
+  border-radius: 6px;
+  border-left: 4px solid #0d6efd;
+  cursor: pointer;
+  transition: all .3s ease;
+
+  button {
+    margin-top: 0.5rem;
+    background-color: #f74b64;
+    border: none;
+    outline: transparent;
+    color: #f7f6f6;
+    border-radius: 4px;
+    padding: 0.45rem 0.5rem;
+    cursor: pointer;
+  }
+
+  button:hover {
+    color: #6c757d;
+    background-color: #9f3142;
+  }
+}
+
+.profile-card:hover {
+  border-right: 4px solid #0d6efd;
+}
+
+.name {
+  font-weight: bold;
+  margin-bottom: 0.25rem;
+}
+
+.role {
+  color: #6c757d;
+  font-size: 0.9rem;
+}
+
+.empty {
+  color: #6c757d;
+  font-style: italic;
+}

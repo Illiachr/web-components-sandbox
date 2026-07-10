@@ -6,15 +6,18 @@ const ELEM_NAME = 'profile-form';
 const FORM_TITLES = {
   CREATE_PROFILE: 'Create profile',
   EDIT_PROFILE: 'Edit profile',
+  PROFILE_DETAILS: 'Profile Details'
 }
 const INITIAL_STATE = {
   id: null,
   name: '',
-  role: ''
+  role: '',
+  mode: 'create',
 }
 
 class ProfileForm extends HTMLElement {
-  #state = INITIAL_STATE
+  #state = INITIAL_STATE;
+  #renderPending = null;
 
   constructor() {
     super();
@@ -23,24 +26,51 @@ class ProfileForm extends HTMLElement {
     this.shadowRoot.appendChild(template.content.cloneNode(true));
     this.shadowRoot.adoptedStyleSheets = [stylesheet];
     this.formElement = this.shadowRoot.getElementById(TEMPLATE_SHARED_CONST.FORM_ELEM_ID);
+    this.editBtn = this.shadowRoot.getElementById(TEMPLATE_SHARED_CONST.EDIT_BTN_ID);
     this.formTitleElement = this.shadowRoot.getElementById(TEMPLATE_SHARED_CONST.TITLE_ELEM_ID);
     this.nameErrElem = this.shadowRoot.getElementById(TEMPLATE_SHARED_CONST.NAME_ERR_ELEM_ID);
     this.roleErrElem = this.shadowRoot.getElementById(TEMPLATE_SHARED_CONST.ROLE_ERR_ELEM_ID);
   }
 
-  set profileData(data) {    
+  set profileData(data) {
     this.#state = { ...this.#state, ...data };
-    this.render();
+    this.debounceRender()
   }
 
   connectedCallback() {
-    this.formElement.addEventListener('submit', (e) => { this.handleSubmit(e) });
+    this.abortController = new AbortController()
+    this.formElement.addEventListener(
+      'submit',
+      (e) => { this.handleSubmit(e) },
+      { signal: this.abortController.signal });
+
+    this.editBtn.addEventListener(
+      'click',
+      () => { this.setAttribute('mode', 'edit'); },
+      { signal: this.abortController.signal });
   }
 
-  onRouterEnter() {
+  disconnectedCallback() {
+    this.abortController.abort();
+  }
+
+  onRouteEnter() {
     if (window.location.pathname === '/create') {
       this.reset();
-      this.render();
+      this.debounceRender()
+    }
+  }
+
+  static get observedAttributes() {
+    return ['mode'];
+  }
+
+  attributeChangedCallback(name, prevVal, newVal) {
+    if (prevVal === newVal) return;
+
+    if (name === 'mode') {
+      this.#state.mode = newVal;
+      this.debounceRender()
     }
   }
 
@@ -48,18 +78,34 @@ class ProfileForm extends HTMLElement {
     this.formElement.reset();
     this.nameErrElem.hide();
     this.roleErrElem.hide();
-    this.#state = INITIAL_STATE;
+    this.#state = { ...INITIAL_STATE };
+    this.debounceRender()
+  }
+
+  debounceRender() {
+    if (this.#renderPending) {
+      cancelAnimationFrame(this.#renderPending);
+    }
+
+    const handler = () => {
+      this.render();
+      this.#renderPending = null;
+    };
+
+    this.#renderPending = requestAnimationFrame(handler);
   }
 
   render() {
-    console.dir(this.#state);
-    console.dir(this);
-    this.formTitleElement.textContent = this.#state.id ? FORM_TITLES.EDIT_PROFILE : FORM_TITLES.CREATE_PROFILE;
+    this.formTitleElement.textContent = this.#state.id ? FORM_TITLES.PROFILE_DETAILS : FORM_TITLES.CREATE_PROFILE;
+
+    if (this.#state.mode === 'edit')
+      this.formTitleElement.textContent = FORM_TITLES.EDIT_PROFILE;
 
     for (const key in this.#state) {
-      console.log(key);      
-      if (key === 'id') continue;      
-      this.formElement[key].value = this.#state[key];
+      if (['id', 'mode'].includes(key)) continue;
+      if (!this.formElement[key]) continue;
+        console.log(key);
+        this.formElement[key].value = this.#state[key] || '';
     }
 
   }
@@ -93,7 +139,7 @@ class ProfileForm extends HTMLElement {
     const nameErrElem = this.shadowRoot.getElementById(TEMPLATE_SHARED_CONST.NAME_ERR_ELEM_ID);
     const roleInputElem = this.shadowRoot.getElementById(TEMPLATE_SHARED_CONST.ROLE_INPUT_ELEM_ID);
     const roleErrElem = this.shadowRoot.getElementById(TEMPLATE_SHARED_CONST.ROLE_ERR_ELEM_ID);
-    // Name is too short
+
     if (!nameInputElem.checkValidity()) {
       nameErrElem.show('Name is too short!');
       isValid = false;

@@ -28,16 +28,16 @@ class AppRouter extends HTMLElement {
   handleRoute() {
     const path = window.location.pathname;
     const pages = Array.from(this.children);
-    
+
     const pageHandler = (page) => {
       const routeAttr = page.getAttribute('route');
       if (routeAttr !== path) {
         page.classList.remove('active');
-        return; 
+        return;
       }
       page.classList.add('active');
-      if (typeof page.onRouterEnter === 'function') {
-        page.onRouterEnter();
+      if (typeof page.onRouteEnter === 'function') {
+        page.onRouteEnter();
       }
     };
 

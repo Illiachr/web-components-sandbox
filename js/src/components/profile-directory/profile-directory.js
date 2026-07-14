@@ -3,7 +3,6 @@ import ProfileList from '../profile-list/profile-list.js';
 import { template, TEMPLATE_SHARED_CONST } from "./template.js";
 import stylesheet from './styles.css' with {type: 'css'};
 import { CUSTOM_EVENTS, OPEN } from '../../metadata/constants.js';
-import dataSource from '../../metadata/dataSource.js';
 
 const ELEM_NAME = 'profile-directory';
 
@@ -18,17 +17,34 @@ class ProfileDirectory extends HTMLElement {
     this.listElement = this.shadowRoot.getElementById(TEMPLATE_SHARED_CONST.LIST_ELEM_ID);
   }
 
+  set data(profiles) {
+    if (this.listElement) {
+      this.listElement.data = profiles;
+    }
+  }
+
   connectedCallback() {
-    this.profiles = dataSource.searchProfiles('');
+    this.dispatchEvent(new CustomEvent(CUSTOM_EVENTS.PROFILE_DIR_READY, {
+      bubbles: true,
+      composed: true
+    }));
     this.shadowRoot.addEventListener(CUSTOM_EVENTS.SEARCH_CHANGE, (e) => {
       const searchQuery = e.detail.query;
       this.updateStatus(searchQuery);
-      this.filterProfiles(searchQuery);
+      this.dispatchEvent(new CustomEvent(CUSTOM_EVENTS.PROFILE_DIR_SEARCH, {
+        detail: { query: searchQuery },
+        bubbles: true,
+        composed: true
+      }));
     });
 
     this.shadowRoot.addEventListener(CUSTOM_EVENTS.PROFILE_DELETE, (e) => {
-      this.deleteProfile(e.detail.profileId)
-    });
+      this.dispatchEvent(new CustomEvent(CUSTOM_EVENTS.PROFILE_DIR_DELETE, {
+        detail: { profileId: e.detail.profileId },
+        bubbles: true,
+        composed: true
+      }));
+    })
   }
 
   updateStatus(searchQuery) {
@@ -39,16 +55,6 @@ class ProfileDirectory extends HTMLElement {
     }
 
     this.statusElement.textContent = `Searching database for ${query}`;
-
-  }
-
-  filterProfiles(searchQuery) {
-    this.listElement.data = dataSource.searchProfiles(searchQuery);
-  }
-
-  deleteProfile(profileId) {
-    dataSource.deleteProfile(profileId);
-    this.listElement.data = dataSource.searchProfiles('');
   }
 }
 

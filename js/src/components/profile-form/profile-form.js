@@ -32,8 +32,10 @@ class ProfileForm extends HTMLElement {
     this.roleErrElem = this.shadowRoot.getElementById(TEMPLATE_SHARED_CONST.ROLE_ERR_ELEM_ID);
   }
 
-  set profileData(data) {
-    this.#state = { ...this.#state, ...data };
+  set data(profile) {
+    this.#state = { ...this.#state, ...profile };
+    console.log(this.#state);
+    
     this.debounceRender()
   }
 

@@ -12,11 +12,10 @@ export class ValidationMessage extends HTMLElement {
   }
 
   connectedCallback() {
-    console.log('validation-message inserted in DOM');
   }
 
   disconnectedCallback() {
-    console.log('validation-message removed from DOM');
+
   }
 
   show(msg) {

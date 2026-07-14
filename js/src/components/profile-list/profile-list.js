@@ -1,4 +1,4 @@
-import profileListTemplate from './tepmplate.js';
+import profileListTemplate from './template.js';
 import stylesheet from './styles.css' with {type: 'css'};
 import { CUSTOM_EVENTS, OPEN } from '../../metadata/constants.js';
 

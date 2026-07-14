@@ -9,6 +9,16 @@
   font-family: system-ui, sans-serif;
 }
 
+.btn-edit {
+  display: none;
+}
+
+:host[mode="edit"] {
+  .btn-edit {
+    display: initial;
+  }
+}
+
 .form-group {
   margin-bottom: 1rem;
 }

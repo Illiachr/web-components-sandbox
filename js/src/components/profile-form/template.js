@@ -8,6 +8,7 @@ const TEMPLATE_CONST = {
 const TEMPLATE_SHARED_CONST = {
   FORM_ELEM_ID: 'profile-form',
   TITLE_ELEM_ID: 'form-title',
+  EDIT_BTN_ID: 'edit-btn',
   NAME_INPUT_ELEM_ID: 'name',
   ROLE_INPUT_ELEM_ID: 'role',
   NAME_ERR_ELEM_ID: 'name-error',
@@ -28,6 +29,7 @@ template.innerHTML = `<form novalidate id="${TEMPLATE_SHARED_CONST.FORM_ELEM_ID}
       <validation-message class="error" id="${TEMPLATE_SHARED_CONST.ROLE_ERR_ELEM_ID}"></validation-message>
     </div>
 
+    <button class="btn-edit" type="button" id="${TEMPLATE_SHARED_CONST.EDIT_BTN_ID}">Edit</button>
     <button type="submit">Save</button>
   </form>`;
 

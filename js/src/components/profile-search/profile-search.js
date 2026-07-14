@@ -1,4 +1,4 @@
-import { template, TEMPLATE_SHARED_CONST } from './tepmplate.js'
+import { template, TEMPLATE_SHARED_CONST } from './template.js'
 import stylesheet from './profile-search.css' with {type: 'css'};
 import { OPEN } from '../../metadata/constants.js';
 
